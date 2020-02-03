@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WCHS Software Installer</title>
+    <script src="render.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="modal" id="modal">
+        <div class="loginbox">
+            <h3 style="margin-top: 0px; padding-top: 0px; padding-bottom: 10px;">Enter network credentials:</h3>
+            <input type="text" class="textbox" id="user"><br>
+            <input type="password" class="textbox" id="pass" onkeydown="if (event.keyCode == 13) document.getElementById('loginbutton').click()"><br>
+            <input type="button" class="cancelbutton" value="Cancel" onclick="hideLogin()">
+            <input type="button" class="loginbutton" id="loginbutton" value="Install" onclick="installStuff()">
+        </div>
+    </div>
+    <div class ="modal" id="messagemodal">
+        <div class="loginbox">
+            <h3 style="margin-top: 0px; padding-top: 0px; padding-bottom: 10px;">Please enter at least one computer.</h3>
+            <input type="button" class="loginbutton" value="OK" onclick="hideMessage()">
+        </div>
+    </div>
+    <div class="grid">
+        <div class="cell orange">
+            <h3>Select Package:</h3>
+            <input type="radio" name="package" value="students" checked onclick="studentList()">Students<br>
+            <input type="radio" name="package" value="staff" onclick="staffList()">Staff<br>
+            <input type="radio" name="package" value="huffer" onclick="hufferList()">Huffer<br>
+            <input type="radio" name="package" value="mccreery" onclick="mccreeryList()">McCreery<br>
+            <input type="radio" name="package" value="miller" onclick="millerList()">Miller<br>
+            <input type="radio" name="package" value="mills" onclick="millsList()">Mills<br>
+            <input type="radio" name="package" value="mills teacher" onclick="millsTeacherList()">Mills Teacher<br>
+            <input type="radio" name="package" value="morrow" onclick="morrowList()">Morrow<br>
+            <input type="radio" name="package" value="schramm" onclick="schrammList()">Schramm<br>
+            <input type="radio" name="package" value="wacc engineering laptops" onclick="waccEngineeringLaptopsList()">WACC Engineering Laptops<br>
+            <input type="radio" name="package" value="waldeck" onclick="waldeckList()">Waldeck<br>
+            <input type="radio" name="package" value="zakaria" onclick="zakariaList()">Zakaria
+        </div>
+        <div class="cell">
+            <h3>Select action after software is installed:</h3>
+            <input type="radio" name="action" value="nothing" checked>Nothing<br>
+            <input type="radio" name="action" value="shutdown">Shut down<br>
+            <input type="radio" name="action" value="restart">Restart<br>
+            <input type="radio" name="action" value="logoff">Sign out
+        </div>
+        <div class="cell">
+            <h3>List of computers to install on:</h3>
+            <textarea rows="16" cols="15" id="computerlist"></textarea>
+        </div>
+        <div class="cell orange">
+            <h3>Software in package:</h3>
+            <div class="grid">
+                <div class="softwarecolumn">
+                    <ul id="softwarelist"><li>Adobe Acrobat Reader DC</li><li>DRC Insight</li><li>TestNAV</li><li>Indiana Secure Browser</li><li>Meraki</li><li>VLC Player</li><li>Office 2016 Pro Plus</li><li>Google Chrome</li></ul>
+                </div>
+                <div class="softwarecolumn">
+                    <p id="notestitle" style="padding: 0px; margin-top: 0px; margin-left: 5px;"></p>
+                    <ul id="notes"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="install" onclick="checkForComputers()">Install</button>
+</body>
+</html>

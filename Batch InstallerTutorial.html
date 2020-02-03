@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Batch Installer Tutorial</title>
+    <style>
+        p {
+            padding: 20px;
+        }
+
+        h1 {
+            padding: 20px;
+        }
+
+        h2 {
+            padding: 20px;
+        }
+
+        .codeblock {
+            margin-left: 20px;
+            display: inline-block;
+            background-color: #64646450;
+        }
+
+        .code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Batch Installer Tutorial</h1>
+    <hr>
+    <p>The following is from the template which is located in \\wcstech\installs\WCHS and should be in every batch installer.</p>
+    <div class="codeblock">
+        <p class="code">
+            @echo off
+            <br/>set choice=n
+            <br/>if [%1]==[] (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Would you like to shut down or log off after installation?
+            <br/>&nbsp&nbsp&nbsp&nbspset /p choice=(s = shutdown, r = restart, l = logoff, n = nothing):
+            <br/>&nbsp&nbsp&nbsp&nbspgoto start
+            <br/>)
+            <br/>if %1==/n set choice=n
+            <br/>if %1==/s set choice=s
+            <br/>if %1==/r set choice=r
+            <br/>if %1==/l set choice=l
+            <br/><br/>:start
+            <br/>reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 0 /f >nul
+            <br/><br/>(INSERT SOFTWARE INSTALLATION HERE)
+            <br/><br/>reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 5 /f >nul
+            <br/><br/>if %choice%==s (
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /s /c "Software installed. Shutting down."
+            <br>)
+            <br/><br/>if %choice%==r (
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /r /c "Software installed. Restarting."
+            <br/>)
+            <br/><br/>if %choice%==l (
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /l
+            <br/>)
+        </p>
+    </div>
+    <hr>
+
+    <h2>Each part explained</h2>
+    <div class="codeblock">
+        <p class="code">@echo off</p>
+    </div>
+    <p>This makes it so the command line ran in the batch file does not appear on the screen in the program.</p>
+    <div class="codeblock">
+        <p class="code">
+            if [%1]==[] (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Would you like to shut down or log off after installation?
+            <br/>&nbsp&nbsp&nbsp&nbspset /p choice=(s = shutdown, r = restart, l = logoff, n = nothing):
+            <br/>&nbsp&nbsp&nbsp&nbspgoto start
+            <br/>)
+            <br/>if %1==/n set choice=n
+            <br/>if %1==/s set choice=s
+            <br/>if %1==/r set choice=r
+            <br/>if %1==/l set choice=l
+        </p>
+    </div>
+    <p>If the batch file is ran normally, there will be no arguments, so it will ask the user what to do after it finishes. The echo command outputs anything after "echo" onto the screen. In the second line, a variable named "choice" is being set. The "/p" is used for user input, and the message displayed to the user during the prompt comes after "=". Then, the code starts running at the "start" marker below. The four if statments following this are for when arguments are passed into the batch file and are used when ran through the package installer.</p>
+    <div class="codeblock">
+        <p class="code">reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 0 /f >nul</p>
+    </div>
+    <p>This line uses the registry editor to disable user account control so that messages asking if you want to run the installer don't pop up and halt the process. For more information on the reg command click <a href="https://ss64.com/nt/reg.html" target="_blank">here</a></p>
+    <div class="codeblock">
+        <p class="code">reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 5 /f >nul</p>
+    </div>
+    <p>This is the same as the previous reg command, but the value of the setting is set back to the default (5) which makes admin promts appear when administrative tasks are being done.</p>
+    <div class="codeblock">
+        <p class="code">
+            if %choice%==s (
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /s /c "Software installed. Shutting down."
+            <br/>)
+            <br/><br/>if %choice%==r (
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /r /c "Software installed. Restarting."
+            <br/>)
+            <br/><br/>if %choice%==l (
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /l
+            <br/>)
+        </p>
+    </div>
+    <p>This checks if the value of the variable "choice" that the user inputted earlier is "s", "r", or "l" and performs the action corresponding to it. Information for the shutdown command can be found <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/shutdown" target="_blank">here</a></p>
+    <hr>
+
+    <h2>Installing software</h2>
+    <p>Software will be installed in place of "(INSERT SOFTWARE INSTALLATION HERE)". The method used to install the software will depend on the file type. If using a .exe file, the syntax is:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "path to install folder" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Software is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing software...
+            <br/>&nbsp&nbsp&nbsp&nbspstart /wait "" "path to .exe file" (arguments)
+            <br/>)
+        </p>
+    </div>
+    <p>The program checks to see if the install folder for the program already exists before running the installer. The install folders are normally in C:\Program Files or C:\Program Files (x86). The paths needs to be in quotes if there is a space in the path. If the folder does not exist, the installer run. If the .exe file installs the program without needing user input (Office and Google Chrome), then no arguments will be needed. However, if there are prompts for the user for installation, then an argument will be needed. The argument needed for VLC Player, for example, is "/S" for silent installation, but the argument differs between installers. Searching on the internet or using the Universal Silent Switch Finder (\\wcstech\installs\wchs\ussf.exe) is the best way to find the argument needed.</p>
+    <p>The other file type used to install programs is .msi. The syntax is:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "path to install folder" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Software is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing software...
+            <br/>&nbsp&nbsp&nbsp&nbspmsiexec /i "path to .msi file" /qn
+            <br/>)
+        </p>
+    </div>
+    <p>The argument for silent installation is the same for all .msi files. As with the .exe files, the path needs to be in quotes if there is a space in it.</p>
+    <hr>
+
+    <h2>Examples</h2>
+    <p>VLC Player:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "C:\Program Files (x86)\VideoLAN\VLC" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho VLC Player is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing VLC Player...
+            <br/>&nbsp&nbsp&nbsp&nbspstart /wait "" "\\wcstech\Installs\vlc\vlc-3.0.7-win32.exe" /S
+            <br/>)
+        </p>
+    </div>
+    <p>Office 2016:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "C:\Program Files (x86)\Microsoft Office\Office16" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Microsoft Office 2016 Pro Plus is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing Office 2016 Pro...
+            <br/>&nbsp&nbsp&nbsp&nbspstart /wait "" "\\wcstech\Installs\microsoft\Office 2016 Pro Plus\setup.exe"
+            <br/>)
+        </p>
+    </div>
+    <p>Meraki:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "C:\Program Files (x86)\Meraki" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Meraki is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing Meraki...
+            <br/>&nbsp&nbsp&nbsp&nbspmsiexec /i "\\wcstech\Installs\Meraki\MerakiSM-Agent-computer-systems-manager.msi" /qn
+            <br/>)
+        </p>
+    </div>
+    <p>Photoshop:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "C:\Program Files\Adobe\Adobe Photoshop CC 2019" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Adobe Photoshop CC 2019 is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing Adobe Photoshop...
+            <br/>&nbsp&nbsp&nbsp&nbspstart /wait "" "\\wcstech\installs\Adobe\2019-20\Win 64\Photoshop CC 20.0.4\Build\setup.exe" --silent
+            <br/>)
+        </p>
+    </div>
+    <p>Autodesk Inventor:</p>
+    <div class="codeblock">
+        <p class="code">
+            if exist "C:\Program Files\Autodesk\Inventor 2020" (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Autodesk Inventor 2020 is already installed, skipping...
+            <br/>) else (
+            <br/>&nbsp&nbsp&nbsp&nbspecho Installing Autodesk Inventor...
+            <br/>&nbsp&nbsp&nbsp&nbspmkdir "C:\temp_pltw"
+            <br/>&nbsp&nbsp&nbsp&nbspmkdir "C:\temp_pltw\Inventor_2020"
+            <br/>&nbsp&nbsp&nbsp&nbspstart /wait "" robocopy "\\wcstech\installs\pltw\2019-2020\Autodesk\Inventor_2020" "C:\temp_pltw\Inventor_2020" /E /S
+            <br/>&nbsp&nbsp&nbsp&nbspstart /wait "" "C:\temp_pltw\Inventor_2020\Inventor_2020.lnk"
+            <br/>&nbsp&nbsp&nbsp&nbsp:waiti
+            <br/>&nbsp&nbsp&nbsp&nbsptasklist /FI "IMAGENAME eq Setup.exe" 2>NUL | find /I /N "Setup.exe">nul
+            <br/>&nbsp&nbsp&nbsp&nbspif "%ERRORLEVEL%"=="0" goto waiti
+            <br/>&nbsp&nbsp&nbsp&nbspdel /Q "C:\temp_pltw"
+            <br/>&nbsp&nbsp&nbsp&nbspshutdown /r
+            <br/>)
+        </p>
+    </div>
+    <p>Note: When installing Autodesk software, the batch file needs to constantly detect if Setup.exe is running or else it would continue without the installation finishing and cause problems. The computer also restarts when intalling Adobe programs because it sometimes needs an admin to log in after it restarts so it can finish installing.</p>
+    <p style="font-size: 10pt">updated by Dawson Vilamaa on 8/9/2019</p>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "wchs-package-installer",
+  "version": "0.0.1",
+  "description": "package installer for WCHS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Dawson Vilamaa",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  },
+  "devDependencies": {
+    "electron": "^6.0.1"
+  }
+}

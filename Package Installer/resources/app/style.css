@@ -1,0 +1,128 @@
+.grid {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto;
+}
+
+.cell {
+    height: auto;
+    width: auto;
+    border-radius: 5px;
+    background-color: #b8b8b8;
+    padding: 10px;
+}
+
+.softwarecolumn {
+    height: auto;
+    width: auto;
+    padding: 10px;
+}
+
+.install {
+    width: 100%;
+    margin-top: 10px;
+    background-color: #fd8e34;
+    transition: 0.3s;
+    border:none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 40px;
+}
+
+.install:hover {
+    background-color: #50ff59;
+    transition: 0.1s;
+}
+
+.install:active {
+    background-color: #42cf49;
+}
+
+.orange {
+    background-color: #fd8e34;
+}
+
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    resize: none;
+}
+
+ul {
+    padding-top: 0px;
+    margin-top: 0px;
+    padding-left: 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.loginbox {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: fit-content;
+    align-self: center;
+}
+
+.textbox {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 3px;
+    border: 1px solid rgb(177, 177, 177);
+    border-radius: 5px;
+}
+
+.cancelbutton {
+    margin-top: 5px;
+    margin-right: 4px;
+    background-color: white;
+    border-color: #fd8e34;
+    border-style: solid;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.loginbutton {
+    margin-top: 5px;
+    margin-left: 4px;
+    background-color: #fd8e34;
+    border-color: #fd8e34;
+    border-style: solid;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.loginbutton:hover {
+    background-color: #50ff59;
+    border-color: #50ff59;
+    transition: 0.1s;
+}
+
+.loginbutton:active {
+    background-color: #42cf49;
+    border-color: #42cf49;
+}
